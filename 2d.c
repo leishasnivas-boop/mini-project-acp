@@ -92,12 +92,13 @@ int main() {
             scanf("%d", &type);
             shapes[count].id = count;
             shapes[count].type = (Type)type;
-            shapes[count].active = 1;
+            shapes[count].active = 0;
             if (type == 1) { printf("Enter x1 y1 x2 y2: "); scanf("%d %d %d %d", &shapes[count].d[0], &shapes[count].d[1], &shapes[count].d[2], &shapes[count].d[3]); }
             else if (type == 2) { printf("Enter top-left x y and bottom-right x y: "); scanf("%d %d %d %d", &shapes[count].d[0], &shapes[count].d[1], &shapes[count].d[2], &shapes[count].d[3]); }
             else if (type == 3) { printf("Enter center x y and radius: "); scanf("%d %d %d", &shapes[count].d[0], &shapes[count].d[1], &shapes[count].d[2]); }
             else if (type == 4) { printf("Enter x1 y1 x2 y2 x3 y3: "); scanf("%d %d %d %d %d %d", &shapes[count].d[0], &shapes[count].d[1], &shapes[count].d[2], &shapes[count].d[3], &shapes[count].d[4], &shapes[count].d[5]); }
             printf("Object added with index %d.\n", count);
+            count++;
         } else if (choice == 2) {
             printf("Enter object index to delete: ");
             scanf("%d", &id);

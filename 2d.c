@@ -20,16 +20,12 @@ int count = 0;
 
 void clear_canvas() {
     for (int y = 0; y < H; y++) {
-        for (int x = 0; x < W; x++) {
-            canvas[y][x] = '_';
-        }
+        for (int x = 0; x < W; x++) { canvas[y][x] = '_'; }
     }
 }
 
 void plot(int x, int y) {
-    if (x >= 0 && x < W && y >= 0 && y < H) {
-        canvas[y][x] = '*';
-    }
+    if (x >= 0 && x < W && y >= 0 && y < H) { canvas[y][x] = '*'; }
 }
 
 void draw_line(int x0, int y0, int x1, int y1) {
@@ -64,21 +60,16 @@ void display() {
     for (int i = 0; i < count; i++) {
         if (!shapes[i].active) continue;
         Shape s = shapes[i];
-        if (s.type == LINE) {
-            draw_line(s.d[0], s.d[1], s.d[2], s.d[3]);
-        } else if (s.type == RECT) {
+        if (s.type == LINE) { draw_line(s.d[0], s.d[1], s.d[2], s.d[3]); } 
+        else if (s.type == RECT) {
             int x1 = s.d[0], y1 = s.d[1], x2 = s.d[2], y2 = s.d[3];
-            draw_line(x1, y1, x2, y1);
-            draw_line(x1, y2, x2, y2);
-            draw_line(x1, y1, x1, y2);
-            draw_line(x2, y1, x2, y2);
+            draw_line(x1, y1, x2, y1); draw_line(x1, y2, x2, y2);
+            draw_line(x1, y1, x1, y2); draw_line(x2, y1, x2, y2);
         } else if (s.type == TRI) {
             draw_line(s.d[0], s.d[1], s.d[2], s.d[3]);
             draw_line(s.d[2], s.d[3], s.d[4], s.d[5]);
             draw_line(s.d[4], s.d[5], s.d[0], s.d[1]);
-        } else if (s.type == CIRCLE) {
-            draw_circle(s.d[0], s.d[1], s.d[2]);
-        }
+        } else if (s.type == CIRCLE) { draw_circle(s.d[0], s.d[1], s.d[2]); }
     }
     for (int y = 0; y < H; y++) {
         for (int x = 0; x < W; x++) { putchar(canvas[y][x]); }
@@ -92,8 +83,6 @@ void print_menu() {
 
 int main() {
     int choice, type, id;
-    int t0, t1, t2, t3, t4, t5; // Temp variables used for the bug
-
     while (1) {
         print_menu();
         if (scanf("%d", &choice) != 1) break;
@@ -109,7 +98,6 @@ int main() {
             else if (type == 3) { printf("Enter center x y and radius: "); scanf("%d %d %d", &shapes[count].d[0], &shapes[count].d[1], &shapes[count].d[2]); }
             else if (type == 4) { printf("Enter x1 y1 x2 y2 x3 y3: "); scanf("%d %d %d %d %d %d", &shapes[count].d[0], &shapes[count].d[1], &shapes[count].d[2], &shapes[count].d[3], &shapes[count].d[4], &shapes[count].d[5]); }
             printf("Object added with index %d.\n", count);
-            count++;
         } else if (choice == 2) {
             printf("Enter object index to delete: ");
             scanf("%d", &id);
@@ -117,10 +105,16 @@ int main() {
         } else if (choice == 3) {
             printf("Enter object index to modify: ");
             scanf("%d", &id);
-            // BUG: Reading inputs into temporary variables but forgetting to update the array!
             if (id >= 0 && id < count && shapes[id].active) {
-                if (shapes[id].type == LINE || shapes[id].type == RECT) {
-                    if (shapes[id].type == LINE) printf("Enter x1 y1 x2 y2: ");
-                    else printf("Enter top-left x y and bottom-right x y: ");
-                    scanf("%d %d %d %d", &t0, &t1, &t2, &t3);
-                } else if (shapes
+                if (shapes[id].type == LINE) { printf("Enter x1 y1 x2 y2: "); scanf("%d %d %d %d", &shapes[id].d[0], &shapes[id].d[1], &shapes[id].d[2], &shapes[id].d[3]); }
+                else if (shapes[id].type == RECT) { printf("Enter top-left x y and bottom-right x y: "); scanf("%d %d %d %d", &shapes[id].d[0], &shapes[id].d[1], &shapes[id].d[2], &shapes[id].d[3]); }
+                else if (shapes[id].type == CIRCLE) { printf("Enter center x y and radius: "); scanf("%d %d %d", &shapes[id].d[0], &shapes[id].d[1], &shapes[id].d[2]); }
+                else if (shapes[id].type == TRI) { printf("Enter x1 y1 x2 y2 x3 y3: "); scanf("%d %d %d %d %d %d", &shapes[id].d[0], &shapes[id].d[1], &shapes[id].d[2], &shapes[id].d[3], &shapes[id].d[4], &shapes[id].d[5]); }
+            }
+        } else if (choice == 4) { display(); }
+        else if (choice == 5) {
+            for (int i = 0; i < count; i++) { if (shapes[i].active) printf("Index %d: Shape Type %d\n", i, shapes[i].type); }
+        }
+    }
+    return 0;
+}
